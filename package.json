@@ -1,0 +1,40 @@
+{
+  "name": "hillel-home-work",
+  "version": "1.0.0",
+  "description": "Make your code greate again",
+  "main": "",
+  "scripts": {
+    "lint": "eslint ./",
+    "prettier": "prettier --write src/*.js"
+  },
+  "author": "Koternyak Sergey",
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/core": "^7.9.0",
+    "@babel/preset-env": "^7.9.0",
+    "browser-sync": "^2.26.7",
+    "eslint": "^6.8.0",
+    "gulp": "^4.0.2",
+    "gulp-autoprefixer": "^7.0.1",
+    "gulp-babel": "^8.0.0-beta.2",
+    "gulp-clean": "^0.4.0",
+    "gulp-clean-css": "^4.2.0",
+    "gulp-concat": "^2.6.1",
+    "gulp-sass": "^4.0.2",
+    "husky": "^4.2.1",
+    "lint-staged": "^10.0.7",
+    "node-sass": "^4.13.1",
+    "prettier": "^1.19.1"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "src/*.js": [
+      "node_modules/.bin/eslint --max-warnings=0",
+      "git add"
+    ]
+  }
+}

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Hillel home work</title>
+    <link rel="stylesheet" type="text/css"  href="./build/styles/styles.css">
+</head>
+<body>
+    <div class="todo hidden">
+        <form id="todo">
+            <input type="text" placeholder="Title" name="title">
+            <textarea rows="10" cols="45" name="text"></textarea>
+            <button>Add note</button>
+        </form>
+        <div class="info">
+            <p class="sum">Всего заметок: <span class="sum_span"></span></p>
+            <p class="done">Выполнено: <span class="done_span"></span></p>
+        </div>
+        <ul class="notes"></ul>
+    </div>
+    <div class="login">
+        <form id="login">
+            <input type="email" name="email" required>
+            <input type="password" name="password" required>
+            <button>Log in</button>
+        </form>
+   
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+    <script src="build/scripts/index.js"></script>
+</body>
+</html>

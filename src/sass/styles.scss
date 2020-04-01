@@ -1,0 +1,70 @@
+form {
+    width: min-content;
+    margin: 24px auto 0;
+}
+
+textarea {
+    resize: none;
+}
+
+input[type="text"] {
+    all: unset;
+    display: block;
+    border-bottom: 1px solid;
+    margin-bottom: 14px;
+    font-size: 24px;
+}
+
+button {
+    all: unset;
+    display: block;
+    padding: 12px;
+    border: 1px solid;
+    white-space: nowrap;
+    width: min-content;
+    margin: 24px auto 0;
+}
+
+ul {
+    display: flex;
+    align-items: flex-start;
+    margin-left: 0;
+    flex-wrap: wrap;
+    list-style: none;
+}
+
+.notes_item {
+    position: relative;
+    text-align: center;
+    border: 3px solid #CADFCF;
+    padding: 0.6em;
+    background: #FEFEFE;
+    color: #231F20;
+    font-family: "Trebuchet MS", "Lucida Sans";
+    width: 200px;
+    min-height: 200px;
+}
+
+.notes_item input {
+    max-width: 170px;
+}
+
+.buttons {
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+.notes_item button {
+
+    all: unset;
+    background-color: wheat;
+}
+
+.completed {
+    text-decoration: line-through;
+    opacity: 0.5;
+}
+.hidden{
+    display: none;
+}
