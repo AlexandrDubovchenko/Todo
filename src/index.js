@@ -1,8 +1,10 @@
 
 class TodoItem {
-
-    setDone(id) {
-        this.noteDone = this.notes.find(el => el._id === +id);
+    constructor(todoItem){
+        this.todoItem = todoItem;
+    }
+    setDone() {
+        this.noteDone = this.todoItem ;
         const { text, title } = {
             text: JSON.parse(this.noteDone.value).text,
             title: JSON.parse(this.noteDone.value).title
@@ -24,12 +26,9 @@ class TodoItem {
             },
             body: JSON.stringify(this.noteDoneObj)
         };
-        fetch(`${this.urlTodo}/${id}/toggle`, this.optionsDone).then(() => {
-            this.notesRender(this.list);
-            this.done.textContent = this.getDone();
-        });
+        return fetch(`${this.urlTodo}/${this.todoItem.id}/toggle`, this.optionsDone);
     }
-    editNote(id, title, text, confirm) {
+    editNote(title, text, confirm) {
         if (confirm) {
             this.editedNoteObj = {
                 'priority': 1,
@@ -47,12 +46,12 @@ class TodoItem {
                 },
                 body: JSON.stringify(this.editedNoteObj)
             };
-            fetch(`${this.urlTodo}/${id}`, this.optionsEdited).then(this.notesRender(this.list));
+            return fetch(`${this.urlTodo}/${this.todoItem.id}`, this.optionsEdited);
         }
 
     }
-    renderEditor(note, id) {
-        this.valueEdit = JSON.parse(this.notes.find(el => el._id === +id).value);
+    renderEditor(note) {
+        this.valueEdit = JSON.parse(this.todoItem.value);
         note.innerHTML =
             `<input type="text" name="title" value="${this.valueEdit.title}">
         
@@ -61,34 +60,26 @@ class TodoItem {
 
 
     }
-    initItem() {
-        this.list.addEventListener('click', e => {
-            if (e.target.classList.contains('note_done')) {
-                this.setDone(e.target.closest('li').id);
-
-            }
-            if (e.target.classList.contains('note_remove')) {
-                this.removeNote(e.target.closest('li').id, confirm('Sure'));
-
-            }
-            if (e.target.classList.contains('note_edit')) {
-                this.renderEditor(e.target.closest('li'), e.target.closest('li').id);
-
-            }
-            if (e.target.classList.contains('note_add')) {
-                const inputTitle = e.target.parentNode.querySelector('[name="title"]');
-                const inputText = e.target.parentNode.querySelector('[name="text"]');
-                this.editNote(e.target.parentNode.id, inputTitle.value, inputText.value, confirm('Sure?'));
-            }
-        });
+    removeNote( confirm) {
+        if (confirm === true) {
+            this.optionsDelete = {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    // eslint-disable-next-line
+                    'Authorization': 'Bearer ' + login.getToken()
+                },
+            };
+            return fetch(`${this.urlTodo}/${this.todoItem.id}`, this.optionsDelete);
+        }
     }
+
 }
 
 
-class Todo extends TodoItem {
+class Todo {
     // eslint-disable-next-line max-params
     constructor($todoForm, $list, $sum, $done, template) {
-        super();
         this.form = $todoForm;
         this.notes = [];
         this.list = $list;
@@ -131,23 +122,7 @@ class Todo extends TodoItem {
         fetch(this.urlTodo, this.optionsAdd)
             .then(res => res.json()).then();
     }
-    removeNote(id, confirm) {
-        if (confirm === true) {
-            this.optionsDelete = {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json',
-                    // eslint-disable-next-line
-                    'Authorization': 'Bearer ' + login.getToken()
-                },
-            };
-            fetch(`${this.urlTodo}/${id}`, this.optionsDelete).then(() => {
-                this.notesRender(this.list);
-                this.done.textContent = this.getDone();
-                this.sum.textContent = this.getSum();
-            });
-        }
-    }
+
     getSum() {
         return this.notes.length;
     }
@@ -182,7 +157,33 @@ class Todo extends TodoItem {
             this.notesRender(this.list);
             this.sum.textContent = this.getSum();
         });
-        this.initItem();
+        this.list.addEventListener('click', e => {
+            const todoItem = new TodoItem (this.notes.find(el => el._id === +e.target.closest('li').id));
+            if (e.target.classList.contains('note_done')) {
+                todoItem.setDone().then(() => {
+                    this.notesRender(this.list);
+                    this.done.textContent = this.getDone();
+                });;
+
+            }
+            if (e.target.classList.contains('note_remove')) {
+                this.removeNote(confirm('Sure')).then(() => {
+                    this.notesRender(this.list);
+                    this.done.textContent = this.getDone();
+                    this.sum.textContent = this.getSum();
+                });
+
+            }
+            if (e.target.classList.contains('note_edit')) {
+                todoItem.renderEditor(e.target.closest('li'), e.target.closest('li').id);
+
+            }
+            if (e.target.classList.contains('note_add')) {
+                const inputTitle = e.target.parentNode.querySelector('[name="title"]');
+                const inputText = e.target.parentNode.querySelector('[name="text"]');
+                this.editNote(inputTitle.value, inputText.value, confirm('Sure?')).then(this.notesRender(this.list))
+            }
+        });
     }
 }
 
